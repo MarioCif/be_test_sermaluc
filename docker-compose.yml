@@ -1,0 +1,13 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:14.3
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD} # esto sale directamente de su .env, asi que cambiar nombre si es necesario
+      POSTGRES_DB: ${DB_NAME} # aplica lo mismo que lo anterios
+    container_name: test_sermaluc # nombre del contenedor en docker, 
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
