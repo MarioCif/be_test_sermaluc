@@ -87,3 +87,4 @@ JWT_SECRET_TOKEN=
 - General dependencies: `npm install`
 - For BDD, install docker and run the command docker-compose up in the project root, the using table-plus or DBeaver import `test-sermaluc.sql`.
 - For test run: npm run test.
+- To test log in and protected services, user: mariosamc8@gmail.com - password: contraseña1.
