@@ -46,7 +46,7 @@ export class UserService {
         password: encrypt_password,
         email: email,
         isActive: true,
-        last_login: new Date().toISOString().split('T')[0],
+        last_login: new Date().toISOString(),
       });
       const payload = { sub: save_user.user_id, username: save_user.email };
       const token = await this.jwtService.signAsync(payload);
@@ -146,6 +146,24 @@ export class UserService {
       queryRunner.release();
     }
     return { token };
+  }
+
+  async updateUser(user: User) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.startTransaction();
+    try {
+      const { user_id, ...data } = user;
+      await queryRunner.manager.update(User, user_id, { ...data });
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error(error.message);
+      throw new InternalServerErrorException(
+        'Something went wrong: ' + error.message,
+      );
+    } finally {
+      queryRunner.release();
+    }
   }
 
   private async savePhoneNumbers(

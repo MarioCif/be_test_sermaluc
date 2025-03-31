@@ -24,8 +24,13 @@ export class AuthService {
       throw new UnauthorizedException('Email or Password mismatch');
 
     const payload = { sub: user.user_id, username: user.email };
+    const token = await this.jwtService.signAsync(payload);
+
+    user.token = token;
+    user.last_login = new Date().toISOString();
+    await this.userService.updateUser(user);
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: token,
     };
   }
 }
